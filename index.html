@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteFour - Tim Pengembang Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        dark: '#1e293b',
+                        accent: '#06b6d4',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'rotate-slow': 'rotate 20s linear infinite',
+                        'scale-pulse': 'scalePulse 2s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        scalePulse: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(59, 130, 246, 0.6)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Cursor Trail Effect */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.8), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Enhanced Glass Effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-effect:hover {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            transform: translateY(-2px);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Enhanced Card Hover */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .card-hover:hover::before {
+            left: 100%;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Interactive Glow Effect */
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glow-effect:hover {
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Enhanced Animated Border */
+        .animated-border {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .animated-border:hover::before {
+            left: 100%;
+        }
+
+        /* Typing Effect */
+        .typing-text {
+            overflow: hidden;
+            border-right: 3px solid #3b82f6;
+            white-space: nowrap;
+            animation: typing 2s steps(8, end), blink-caret 1s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #3b82f6; }
+        }
+
+        .typing-text.finished {
+            border-right: none;
+            animation: none;
+        }
+
+        /* Particle Background */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: float-particle 6s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+
+        /* Interactive Button */
+        .interactive-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .interactive-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Form Enhancements */
+        .form-input {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .form-input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Magnetic Effect */
+        .magnetic {
+            transition: transform 0.3s ease;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Counter Animation */
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Tilt Effect */
+        .tilt-effect {
+            transition: transform 0.3s ease;
+        }
+
+        .tilt-effect:hover {
+            transform: perspective(1000px) rotateX(10deg) rotateY(10deg);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800 overflow-x-hidden">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <h2 class="text-white text-2xl font-bold">ByteFour</h2>
+            <p class="text-white/80">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div id="scroll-progress" class="scroll-progress"></div>
+
+    <!-- Cursor Trail -->
+    <div id="cursor-trail" class="cursor-trail"></div>
+
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full glass-effect shadow-lg z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold gradient-text animate-pulse-slow magnetic">ByteFour</h1>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 relative group magnetic">
+                        Beranda
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 relative group magnetic">
+                        Tentang
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#services" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 relative group magnetic">
+                        Layanan
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#team" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 relative group magnetic">
+                        Tim
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#portfolio" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 relative group magnetic">
+                        Portfolio
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#contact" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 relative group magnetic">
+                        Kontak
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 magnetic">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-2">
+                    <a href="#home" class="text-gray-700 hover:text-primary transition-colors py-2">Beranda</a>
+                    <a href="#about" class="text-gray-700 hover:text-primary transition-colors py-2">Tentang</a>
+                    <a href="#services" class="text-gray-700 hover:text-primary transition-colors py-2">Layanan</a>
+                    <a href="#team" class="text-gray-700 hover:text-primary transition-colors py-2">Tim</a>
+                    <a href="#portfolio" class="text-gray-700 hover:text-primary transition-colors py-2">Portfolio</a>
+                    <a href="#contact" class="text-gray-700 hover:text-primary transition-colors py-2">Kontak</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 relative overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full animate-bounce-slow"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary/10 rounded-full animate-pulse-slow"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full animate-float"></div>
+            <div class="absolute top-20 right-20 w-32 h-32 bg-accent/10 rounded-full animate-rotate-slow"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="reveal">
+                <h1 class="text-5xl md:text-7xl font-bold text-dark mb-6 text-shadow tilt-effect" id="hero-title">
+                    <span class="typing-text">Byte<span class="gradient-text">Four</span></span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto reveal" style="animation-delay: 0.3s;">
+                    Tim pengembang digital yang berdedikasi untuk menciptakan solusi teknologi inovatif dan berkualitas tinggi
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center reveal" style="animation-delay: 0.6s;">
+                    <a href="#services" class="interactive-btn bg-gradient-to-r from-primary to-primary/80 text-white px-8 py-3 rounded-lg hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 glow-effect animated-border magnetic">
+                        Lihat Layanan
+                    </a>
+                    <a href="#contact" class="interactive-btn border-2 border-primary text-primary px-8 py-3 rounded-lg hover:bg-primary hover:text-white transition-all duration-300 transform hover:scale-105 animated-border magnetic">
+                        Hubungi Kami
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/50 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-dark mb-4 gradient-text">Tentang ByteFour</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Kami adalah tim yang terdiri dari empat developer berpengalaman yang berkomitmen untuk memberikan solusi digital terbaik
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8 reveal">
+                    <h3 class="text-2xl font-bold text-dark mb-6">Visi & Misi Kami</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4 card-hover p-6 rounded-xl bg-gradient-to-r from-primary/5 to-transparent tilt-effect">
+                            <div class="bg-gradient-to-br from-primary to-primary/70 p-3 rounded-lg animate-float glow-effect">
+                                <i class="fas fa-eye text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark mb-2">Visi</h4>
+                                <p class="text-gray-600">Menjadi tim pengembang terdepan yang menghadirkan inovasi teknologi untuk kemajuan bisnis klien</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4 card-hover p-6 rounded-xl bg-gradient-to-r from-secondary/5 to-transparent tilt-effect">
+                            <div class="bg-gradient-to-br from-secondary to-secondary/70 p-3 rounded-lg animate-float glow-effect" style="animation-delay: 1s;">
+                                <i class="fas fa-target text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark mb-2">Misi</h4>
+                                <p class="text-gray-600">Memberikan solusi teknologi berkualitas tinggi dengan pendekatan yang personal dan profesional</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-6 reveal">
+                    <div class="bg-gradient-to-br from-primary/10 to-primary/5 p-6 rounded-xl text-center card-hover tilt-effect">
+                        <div class="text-3xl font-bold gradient-text mb-2 counter" data-target="50">0</div>
+                        <div class="text-gray-600">Proyek Selesai</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-secondary/10 to-secondary/5 p-6 rounded-xl text-center card-hover tilt-effect">
+                        <div class="text-3xl font-bold gradient-text mb-2 counter" data-target="30">0</div>
+                        <div class="text-gray-600">Klien Puas</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-primary/10 to-primary/5 p-6 rounded-xl text-center card-hover tilt-effect">
+                        <div class="text-3xl font-bold gradient-text mb-2 counter" data-target="3">0</div>
+                        <div class="text-gray-600">Tahun Pengalaman</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-secondary/10 to-secondary/5 p-6 rounded-xl text-center card-hover tilt-effect">
+                        <div class="text-3xl font-bold gradient-text mb-2">24/7</div>
+                        <div class="text-gray-600">Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gradient-to-br from-slate-50 to-white relative">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full animate-bounce-slow"></div>
+            <div class="absolute bottom-20 right-10 w-24 h-24 bg-secondary/10 rounded-full animate-pulse-slow"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-dark mb-4 gradient-text">Layanan Kami</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Kami menyediakan berbagai layanan pengembangan digital untuk memenuhi kebutuhan bisnis Anda
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 card-hover animated-border group reveal tilt-effect">
+                    <div class="bg-gradient-to-br from-primary/20 to-primary/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 glow-effect">
+                        <i class="fas fa-code text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">Web Development</h3>
+                    <p class="text-gray-600 mb-4">Pengembangan website responsif dan modern menggunakan teknologi terkini</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• React & Next.js</li>
+                        <li>• Node.js & Express</li>
+                        <li>• HTML, CSS, JavaScript</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 card-hover animated-border group reveal tilt-effect">
+                    <div class="bg-gradient-to-br from-secondary/20 to-secondary/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 glow-effect">
+                        <i class="fas fa-mobile-alt text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">Mobile Development</h3>
+                    <p class="text-gray-600 mb-4">Aplikasi mobile native dan cross-platform untuk Android</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• React Native</li>
+                        <li>• Flutter</li>
+                        <li>• Native iOS & Android</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 card-hover animated-border group reveal tilt-effect">
+                    <div class="bg-gradient-to-br from-accent/20 to-accent/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 glow-effect">
+                        <i class="fas fa-paint-brush text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">UI/UX Design</h3>
+                    <p class="text-gray-600 mb-4">Desain antarmuka yang menarik dan pengalaman pengguna yang optimal</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Figma & Adobe XD</li>
+                        <li>• Prototyping</li>
+                        <li>• User Research</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 card-hover animated-border group reveal tilt-effect">
+                    <div class="bg-gradient-to-br from-secondary/20 to-secondary/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 glow-effect">
+                        <i class="fas fa-database text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">Backend Development</h3>
+                    <p class="text-gray-600 mb-4">Pengembangan sistem backend yang robust dan scalable</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• API Development</li>
+                        <li>• Database Design</li>
+                        <li>• Cloud Integration</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 card-hover animated-border group reveal tilt-effect">
+                    <div class="bg-gradient-to-br from-primary/20 to-primary/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 glow-effect">
+                        <i class="fas fa-shopping-cart text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">E-Commerce</h3>
+                    <p class="text-gray-600 mb-4">Solusi e-commerce lengkap untuk bisnis online Anda</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Online Store</li>
+                        <li>• Payment Gateway</li>
+                        <li>• Inventory Management</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 card-hover animated-border group reveal tilt-effect">
+                    <div class="bg-gradient-to-br from-accent/20 to-accent/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 glow-effect">
+                        <i class="fas fa-cogs text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">Maintenance & Support</h3>
+                    <p class="text-gray-600 mb-4">Pemeliharaan dan dukungan teknis berkelanjutan</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Bug Fixes</li>
+                        <li>• Performance Optimization</li>
+                        <li>• Security Updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-gradient-to-br from-white to-slate-50 relative">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-10 right-20 w-40 h-40 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full animate-float"></div>
+            <div class="absolute bottom-10 left-20 w-32 h-32 bg-gradient-to-r from-secondary/20 to-primary/20 rounded-full animate-bounce-slow"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-dark mb-4 gradient-text">Tim ByteFour</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Kenali tim profesional kami yang siap membantu mewujudkan visi digital Anda
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center group card-hover animated-border reveal tilt-effect">
+                    <div class="w-24 h-24 bg-gradient-to-br from-primary to-primary/70 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-all duration-300 glow-effect magnetic">
+                        <i class="fas fa-user text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Muhamad Adhitya</h3>
+                    <p class="text-primary font-medium mb-3">Full Stack Developer</p>
+                    <p class="text-gray-600 text-sm mb-4">Spesialis dalam React, Node.js, dan arsitektur sistem</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center group card-hover animated-border reveal tilt-effect">
+                    <div class="w-24 h-24 bg-gradient-to-br from-secondary to-secondary/70 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-all duration-300 glow-effect magnetic">
+                        <i class="fas fa-user text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Nizar Algifari</h3>
+                    <p class="text-secondary font-medium mb-3">UI/UX Designer</p>
+                    <p class="text-gray-600 text-sm mb-4">Expert dalam desain antarmuka dan pengalaman pengguna</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-dribbble"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-behance"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center group card-hover animated-border reveal tilt-effect">
+                    <div class="w-24 h-24 bg-gradient-to-br from-accent to-accent/70 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-all duration-300 glow-effect magnetic">
+                        <i class="fas fa-user text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Ilham Maulana</h3>
+                    <p class="text-accent font-medium mb-3">Full Stack Developer</p>
+                    <p class="text-gray-600 text-sm mb-4">Spesialis website</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-400 hover:text-accent transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-stack-overflow"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center group card-hover animated-border reveal tilt-effect">
+                    <div class="w-24 h-24 bg-gradient-to-br from-secondary to-primary rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-all duration-300 glow-effect magnetic">
+                        <i class="fas fa-user text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">M Hilmi Rahmansyah</h3>
+                    <p class="text-secondary font-medium mb-3">Marketing</p>
+                    <p class="text-gray-600 text-sm mb-4">Expert dalam business dan Marketing</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-docker"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 bg-gradient-to-br from-slate-50 to-white relative">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full animate-bounce-slow"></div>
+            <div class="absolute bottom-20 right-10 w-24 h-24 bg-secondary/10 rounded-full animate-pulse-slow"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-dark mb-4 gradient-text">Portfolio Kami</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Lihat beberapa proyek terbaik yang telah kami kerjakan untuk klien-klien kami
+                </p>
+            </div>
+            <div class="text-center reveal">
+                <div class="bg-white/80 backdrop-blur-sm p-12 rounded-xl shadow-xl card-hover tilt-effect">
+                    <i class="fas fa-tools text-6xl text-primary/30 mb-6 animate-wiggle"></i>
+                    <h3 class="text-2xl font-bold text-dark mb-4">Portfolio Segera Hadir</h3>
+                    <p class="text-gray-600 mb-6">
+                        Kami sedang mempersiapkan showcase portfolio terbaik kami. 
+                        Sementara itu, hubungi kami untuk melihat contoh pekerjaan kami.
+                    </p>
+                    <a href="#contact" class="interactive-btn bg-gradient-to-r from-primary to-primary/80 text-white px-8 py-3 rounded-lg hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 glow-effect animated-border magnetic">
+                        Hubungi Kami
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gradient-to-br from-white to-slate-50 relative">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full animate-pulse-slow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-48 h-48 bg-gradient-to-r from-secondary/10 to-primary/10 rounded-full animate-float"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-dark mb-4 gradient-text">Hubungi Kami</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Siap untuk memulai proyek Anda? Mari diskusikan kebutuhan Anda dengan tim kami
+                </p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="space-y-8 reveal">
+                    <h3 class="text-2xl font-bold text-dark mb-6">Mari Berkolaborasi</h3>
+                    <p class="text-gray-600 mb-8">
+                        Kami selalu terbuka untuk proyek baru dan kolaborasi yang menarik. 
+                        Hubungi kami untuk konsultasi gratis tentang kebutuhan digital Anda.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4 card-hover p-4 rounded-xl bg-gradient-to-r from-primary/5 to-transparent tilt-effect">
+                            <div class="bg-gradient-to-br from-primary/20 to-primary/10 p-3 rounded-xl animate-float glow-effect magnetic">
+                                <i class="fas fa-envelope text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Instagram</h4>
+                                <p class="text-gray-600"><a href="https://www.instagram.com/bytef0ur?igsh=eW1lM20zZW5pNXRk" class="hover:text-primary transition-colors">ByteFour</a></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 card-hover p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-transparent tilt-effect">
+                            <div class="bg-gradient-to-br from-secondary/20 to-secondary/10 p-3 rounded-xl animate-float glow-effect magnetic" style="animation-delay: 0.5s;">
+                                <i class="fas fa-phone text-secondary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Telepon</h4>
+                                <p class="text-gray-600">+62 89519989300</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 card-hover p-4 rounded-xl bg-gradient-to-r from-accent/5 to-transparent tilt-effect">
+                            <div class="bg-gradient-to-br from-accent/20 to-accent/10 p-3 rounded-xl animate-float glow-effect magnetic" style="animation-delay: 1s;">
+                                <i class="fas fa-map-marker-alt text-accent text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Lokasi</h4>
+                                <p class="text-gray-600">Garut, Indonesia</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="font-semibold text-dark mb-4">Ikuti Kami</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="bg-gradient-to-br from-primary/20 to-primary/10 p-3 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110 glow-effect magnetic">
+                                <i class="fab fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="#" class="bg-gradient-to-br from-secondary/20 to-secondary/10 p-3 rounded-xl text-secondary hover:bg-secondary hover:text-white transition-all duration-300 hover:scale-110 glow-effect magnetic">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="#" class="bg-gradient-to-br from-accent/20 to-accent/10 p-3 rounded-xl text-accent hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110 glow-effect magnetic">
+                                <i class="fab fa-twitter text-xl"></i>
+                            </a>
+                            <a href="#" class="bg-gradient-to-br from-secondary/20 to-secondary/10 p-3 rounded-xl text-secondary hover:bg-secondary hover:text-white transition-all duration-300 hover:scale-110 glow-effect magnetic">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-xl card-hover reveal tilt-effect">
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-dark mb-2">Nama</label>
+                                <input type="text" id="name" name="name" required
+                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 hover:shadow-md">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-dark mb-2">Email</label>
+                                <input type="email" id="email" name="email" required
+                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 hover:shadow-md">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-dark mb-2">Subjek</label>
+                            <input type="text" id="subject" name="subject" required
+                                   class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 hover:shadow-md">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-dark mb-2">Pesan</label>
+                            <textarea id="message" name="message" rows="5" required
+                                      class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 hover:shadow-md"></textarea>
+                        </div>
+                        <button type="submit"
+                                class="interactive-btn w-full bg-gradient-to-r from-primary to-primary/80 text-white py-3 px-6 rounded-xl hover:from-primary/90 hover:to-primary transition-all duration-300 font-medium transform hover:scale-105 glow-effect animated-border magnetic">
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-dark to-slate-800 text-white py-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-primary/20 to-secondary/20"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-4 gap-8 reveal">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">ByteFour</h3>
+                    <p class="text-gray-300 mb-6 max-w-md">
+                        Tim pengembang digital yang berdedikasi untuk menciptakan solusi teknologi inovatif dan berkualitas tinggi untuk kemajuan bisnis Anda.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-primary transition-all duration-300 hover:scale-125 magnetic">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Layanan</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-primary transition-colors magnetic">Web Development</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors magnetic">Mobile Development</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors magnetic">UI/UX Design</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors magnetic">Backend Development</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Kontak</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="https://www.instagram.com/bytef0ur?igsh=eW1lM20zZW5pNXRk" class="hover:text-primary transition-colors magnetic">ByteFour</a></li>
+                        <li>+62 89519989300</li>
+                        <li>Garut, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 ByteFour. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Cursor Trail Effect
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
+        const cursorTrail = document.getElementById('cursor-trail');
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateTrail() {
+            trailX += (mouseX - trailX) * 0.1;
+            trailY += (mouseY - trailY) * 0.1;
+            
+            cursorTrail.style.left = trailX + 'px';
+            cursorTrail.style.top = trailY + 'px';
+            
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+
+        // Particles Background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scroll-progress');
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // Enhanced scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const count = parseInt(counter.innerText);
+                const increment = target / 100;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => animateCounters(), 20);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Trigger counter animation when about section is visible
+        const aboutSection = document.getElementById('about');
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    aboutObserver.unobserve(entry.target);
+                }
+            });
+        });
+        aboutObserver.observe(aboutSection);
+
+        // Magnetic Effect
+        document.querySelectorAll('.magnetic').forEach(element => {
+            element.addEventListener('mousemove', (e) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                element.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+            });
+
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // Contact form handling with enhanced feedback
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            if (!name || !email || !subject || !message) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
+
+            // Add loading state to button
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i>Mengirim...';
+            submitBtn.disabled = true;
+
+            // Simulate form submission
+            setTimeout(() => {
+                alert('Terima kasih! Pesan Anda telah terkirim. Kami akan segera menghubungi Anda.');
+                contactForm.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Enhanced navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('shadow-2xl');
+                navbar.classList.remove('shadow-lg');
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            } else {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.remove('shadow-2xl');
+                navbar.style.background = 'rgba(255, 255, 255, 0.1)';
+            }
+        });
+
+        // Parallax effect for background elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.animate-float, .animate-bounce-slow');
+            
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.1);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Enhanced title animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const typingText = document.querySelector('.typing-text');
+                if (typingText) {
+                    setTimeout(() => {
+                        typingText.classList.add('finished');
+                    }, 2500);
+                }
+            }, 500);
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.interactive-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Enhanced form input animations
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+
+        // Add floating label effect
+        const floatingLabelStyle = document.createElement('style');
+        floatingLabelStyle.textContent = `
+            .focused label {
+                transform: translateY(-20px) scale(0.8);
+                color: #3b82f6;
+            }
+        `;
+        document.head.appendChild(floatingLabelStyle);
+    </script>
+</body>
+</html>
